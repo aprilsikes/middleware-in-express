@@ -1,12 +1,18 @@
 var express = require('express');
 var router = express.Router();
+var authChecker = require('./authChecker');
+
+router.get('/', authChecker.userBouncer);
 
 router.get('/', function(req, res, next) {
   res.render('users/index')
 });
 
+router.get('/:username', authChecker.specific_user_checker);
+router.get('/:username/edit', authChecker.specific_user_checker);
+
 router.get('/:username', function(req, res, next) {
-  res.render('users/show', {username: req.params.username})
+    res.render('users/show', {username: req.params.username})
 });
 
 router.get('/:someUser/edit', function(req, res, next) {

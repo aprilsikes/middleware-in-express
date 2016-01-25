@@ -5,12 +5,14 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
+
 var routes = require('./routes/index');
 var auth = require('./routes/auth');
 var users = require('./routes/users');
 var articles = require('./routes/articles');
 var products = require('./routes/products');
-
+// var checkUser = require('./lib/checkUser');
+var authChecker = require('./routes/authChecker');
 var app = express();
 
 // view engine setup
@@ -34,8 +36,14 @@ app.use(setUserNameLocal)
 
 app.use('/', routes);
 app.use('/', auth);
+// app.use('/users', checkUser);
 app.use('/users', users);
+app.use('/:anyroute', authChecker.userBouncer);
+
+// app.use('/articles', authChecker.userBouncer);
 app.use('/articles', articles);
+
+// app.use('/products', authChecker.userBouncer);
 app.use('/products', products);
 
 // catch 404 and forward to error handler
